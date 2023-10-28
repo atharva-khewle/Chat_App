@@ -1,6 +1,9 @@
 
 
+// import 'dart:js_interop';
+
 import 'package:chatapp/database/utils.dart';
+import 'package:chatapp/firebase/CURD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -20,16 +23,49 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> with SingleTickerProviderStateMixin{
 
+
+
+
   final userid = TextEditingController();
   final userName = TextEditingController();
   final password = TextEditingController();
   bool showpass = true;
   late final AnimationController _controller = AnimationController(vsync: this, duration: Duration(seconds: 10))..repeat();
 
+  //firebase functions
+  firestoresrevice service = new firestoresrevice();
+
+  Container Popup(context){
+    return (
+        Container(
+          child: AlertDialog(
+            title: Text("Please enter correct information"),
+            actions: [
+              TextButton(onPressed: (){
+                Navigator.pop(context);
+              }, child: Text("OK"))
+            ],
+          ),
+        )
+
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        floatingActionButton: FloatingActionButton(
+          child: Icon(CupertinoIcons.dot_square),
+          onPressed: (){
+            print("jfllllllllllllllllllllllllllllllllll");
+            showDialog(context: context,
+                builder:(context)=>AlertDialog(
+                  title: Text("aaa"),
+
+                ) );
+          },
+        ),
         body: SingleChildScrollView(
           child: Container(
             // color: Color(0xffCCB4E7),
@@ -206,6 +242,17 @@ class _RegisterPageState extends State<RegisterPage> with SingleTickerProviderSt
                           ElevatedButton(
                               onPressed: ()async {
 
+
+
+
+
+
+
+
+
+
+
+
                                 String name = "{pass:${password.text},url:,desc: All is Well}";
                                 List<String> str = name.replaceAll("{","").replaceAll("}","").split(",");
                                 Map<String,dynamic> result = {};
@@ -215,32 +262,65 @@ class _RegisterPageState extends State<RegisterPage> with SingleTickerProviderSt
                                 }
                                 print(result["pass"]);
 
-                                await ZIMKit().connectUser(
-                                    id: userid.text,
-                                    name: userName.text,
-                                  avatarUrl: name
-                                );
-
-
-
-                                ZegoUIKitPrebuiltCallInvitationService().init(
-                                  appID: Utils.id /*input your AppID*/,
-                                  appSign: Utils.SignIn /*input your AppSign*/,
-                                  userID: userid.text,
-                                  userName: userName.text,
-                                  plugins: [ZegoUIKitSignalingPlugin()],
-                                );
 
 
 
 
+                                //sent to firebase
+                                // await service.addUserData(userName.text, userid.text, password.text, "", "", "all is welll");
 
-                                print("user issssssssssssssssssssssssssssssssssss");
+                                print("start isssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
+
+                                if(await service.checkuserexistance(userid.text)){
+                                  //user exist so popup
+
+                                  showDialog(context: context, builder: (context){
+                                    return Popup(context);
+                                  });
+                                }else{
+                                  //registers user
+                                  await ZIMKit().connectUser(
+                                      id: userid.text,
+                                      name: userName.text,
+                                      avatarUrl: name
+                                  );
+
+
+
+                                  ZegoUIKitPrebuiltCallInvitationService().init(
+                                    appID: Utils.id /*input your AppID*/,
+                                    appSign: Utils.SignIn /*input your AppSign*/,
+                                    userID: userid.text,
+                                    userName: userName.text,
+                                    plugins: [ZegoUIKitSignalingPlugin()],
+                                  );
+                                }
+
+                                print("end isssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
                                 print(                  ZIMKit().currentUser()?.baseInfo.userName);
                                 print(                  ZIMKit().currentUser()?.extendedData);
                                 GoRouter.of(context).go("/ChatsPage");
 
-                              },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                },
                             style:  ElevatedButton.styleFrom(
                               fixedSize: Size(210, 40),
 
@@ -267,7 +347,7 @@ class _RegisterPageState extends State<RegisterPage> with SingleTickerProviderSt
                                 GestureDetector(
                                   child: Text(" Sign in",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 12),),
                                   onTap: (){
-                                    GoRouter.of(context).go("/");
+                                    GoRouter.of(context).go("/Login");
                                   },
                                 )
                               ],
@@ -293,7 +373,9 @@ class _RegisterPageState extends State<RegisterPage> with SingleTickerProviderSt
 
 
                           ElevatedButton(
-                            onPressed: (){},
+                            onPressed: (){
+
+                            },
                             style:  ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0),

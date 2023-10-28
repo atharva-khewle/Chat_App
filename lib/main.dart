@@ -89,6 +89,11 @@ class MyApp extends StatelessWidget {
 
       GoRoute(
           path: "/",
+          builder: (context,state)=>RegisterPage()
+      ),
+
+      GoRoute(
+          path: "/Login",
           builder: (context,state)=>LoginPage()
       ),
       GoRoute(
