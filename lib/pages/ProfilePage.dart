@@ -1,11 +1,16 @@
 import 'dart:convert';
 
+import 'package:chatapp/Hive/thebox.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:zego_zimkit/services/services.dart';
+
+import '../firebase/CURD.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -16,30 +21,51 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
 
-  String? name = ZIMKit().currentUser()?.userAvatarUrl;
+  // String? name = ZIMKit().currentUser()?.userAvatarUrl;
   Map<String, dynamic> result = {};
 
+  String? imgurl = null;
+  firestoresrevice service = new firestoresrevice();
 
+  final faccount =  FirebaseAuth.instance.currentUser;
+  String? username;
   @override
   void initState() {
     // TODO: implement initState
+  imgurl = service.getimgurl();
 
-    if (ZIMKit().currentUser()?.userAvatarUrl!=null) {
-
-      List<String>? str = name?.replaceAll("{", "").replaceAll("}", "").split(
-          ",");
-      for (int i = 0; i < str!.length; i++) {
-        List<String> s = str[i].split(":");
-        result.putIfAbsent(s[0].trim(), () => s[1].trim());
-      }
-      String aaa = result["url"];
-      print(aaa);
-      print("kjolajoifjoi");
-    }
-
-
-    super.initState();
+  getname();
+  super.initState();
   }
+
+  void getname()async{
+
+    String? temp= await service.getusername();
+    setState(()async {
+      username= temp;
+
+    });
+}
+
+
+
+  void googleSignOut()async {
+    await GoogleSignIn().signOut();
+    FirebaseAuth.instance.signOut();
+    print("++++++++++++++++++++++++++++=signed out from forebase and google++++++++++++++++++++++++++++++");
+  }
+
+
+
+
+
+//hive
+  userbox box1 = new userbox();
+  connectedornot box2 = new connectedornot();
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -79,14 +105,8 @@ class _ProfilePageState extends State<ProfilePage> {
         onPressed: (){
 
 
-          String name = "{pass:999999,url: httpsuwu.com}";
-          List<String> str = name.replaceAll("{","").replaceAll("}","").split(",");
-      Map<String,dynamic> result = {};
-      for(int i=0;i<str.length;i++){
-        List<String> s = str[i].split(":");
-        result.putIfAbsent(s[0].trim(), () => s[1].trim());
-      }
-      print(result["pass"]);
+
+          GoRouter.of(context).go("/");
 
 
 
@@ -122,14 +142,10 @@ class _ProfilePageState extends State<ProfilePage> {
                           // child: Image.asset("assets/u.jpg",),
                           // child: Image.network("https://picsum.photos/200"),
                           child: (
-                              (result["url"]==null || result["url"] =="")?
-
-                          Image.asset("assets/u.jpg",)
-                          :
-                          // Image.network(result["url"])==false?
-                          // Image.asset("assets/u.jpg",)
-                          //     :
-                          Image.network("https://${result["url"]}")
+                              imgurl==null?
+                              Image.asset("assets/u.jpg",)
+                                  :
+                              Image.network(imgurl!,scale: 0.6,)
                           ),
                         ),
                       ),
@@ -230,19 +246,87 @@ class _ProfilePageState extends State<ProfilePage> {
 
                     child: Center(
                       child: Container(
+                        height: 48,
                         width: 300,
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Icon(CupertinoIcons.number,size: 22,color: Color(0xffA177E7),),
-                            Text(
-                              "${ZIMKit().currentUser()?.baseInfo.userID}",
-                              style: TextStyle(
-                                color: Color(0xff825db7)
+                            Icon(Icons.numbers_outlined,color: Color(0xffA177E7),),
+                            SizedBox(width: 20,),
+                            Container(
+                              width: 190,
+                              child: Row(
+
+                                children: [
+
+                                  Flexible(
+                                    child: Text(
+                                      "${ZIMKit().currentUser()?.baseInfo.userID == null ? "now whats the error":ZIMKit().currentUser()?.baseInfo.userID}"
+                                      ,
+                                      // maxLines: 3,
+                                      // overflow: TextOverflow.ellipsis,
+                                      // softWrap: true,
+                                      overflow: TextOverflow.visible,
+                                      style: TextStyle(
+                                          color: Color(0xff825db7)
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            SizedBox(width: 120,),
-                            IconButton(onPressed: (){}, icon: Icon(Icons.edit,color: Color(0xffA177E7),)),
+
+                            // IconButton(onPressed: (){}, icon: Icon(Icons.edit,color: Color(0xffA177E7),)),
+
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10,),
+                  //email
+                  Container(
+                    width: 330,
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.deepPurple.shade200),
+                        borderRadius: BorderRadius.circular(5)
+                    ),
+
+                    child: Center(
+                      child: Container(
+                        height: 48,
+                        width: 300,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(Icons.email_outlined,color: Color(0xffA177E7),),
+                            SizedBox(width: 20,),
+                            Container(
+                              width: 190,
+                              child: Row(
+
+                                children: [
+
+                                  Flexible(
+                                    child: Text(
+                                      "${faccount?.email==null ? "-": faccount?.email}"
+                                      ,
+                                      // maxLines: 3,
+                                      // overflow: TextOverflow.ellipsis,
+                                      // softWrap: true,
+                                      overflow: TextOverflow.visible,
+                                      style: TextStyle(
+                                          color: Color(0xff825db7)
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            // IconButton(onPressed: (){}, icon: Icon(Icons.edit,color: Color(0xffA177E7),)),
 
                           ],
                         ),
@@ -337,35 +421,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 10,),
-                  //email
-                  Container(
-                    width: 330,
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.deepPurple.shade200),
-                        borderRadius: BorderRadius.circular(5)
-                    ),
-                    child: Center(
-                      child: Container(
-                        width: 300,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Icon(Icons.email_outlined,color: Color(0xffA177E7),),
-                            Text(
-                              "apple",
-                              style: TextStyle(
-                                  color: Color(0xff825db7)
-                              ),
-                            ),
-                            SizedBox(width: 120,),
-                            IconButton(onPressed: (){}, icon: Icon(Icons.edit,color: Color(0xffA177E7),)),
 
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+
 
 
 
@@ -386,10 +443,13 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   SizedBox(height: 25,),
                   ElevatedButton(
-                    onPressed: (){
+                    onPressed: ()async{
                       ZegoUIKitPrebuiltCallInvitationService().uninit();
 
+                       googleSignOut();
                       ZIMKit().disconnectUser();
+                      // box1.deleteuserdata();
+                      box2.putinbox("no", 0);
                       GoRouter.of(context).go("/");
 
                     },
@@ -411,6 +471,8 @@ class _ProfilePageState extends State<ProfilePage> {
                           Text("Logout",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 14),),
 
                           Icon(Icons.logout),
+
+
                         ],
                       ),
                     ),

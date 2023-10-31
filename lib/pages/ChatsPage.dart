@@ -1,3 +1,4 @@
+
 import 'package:chatapp/pages/call/Callpage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +6,8 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:zego_zimkit/services/services.dart';
 import 'package:zego_zimkit/zego_zimkit.dart';
+
+import '../firebase/CURD.dart';
 
 class ChatsPage extends StatefulWidget {
   const ChatsPage({super.key});
@@ -14,6 +17,19 @@ class ChatsPage extends StatefulWidget {
 }
 
 class _ChatsPageState extends State<ChatsPage> {
+
+
+  String? imgurl = null;
+  firestoresrevice service = new firestoresrevice();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    imgurl = service.getimgurl();
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,10 +98,30 @@ class _ChatsPageState extends State<ChatsPage> {
         backgroundColor: Color(0xffA177E7),
         actions: [
 
-          IconButton(onPressed: (){
-            GoRouter.of(context).go("/ProfilePage");
-          }, icon: Icon(CupertinoIcons.profile_circled,color: Colors.white,)),
-          SizedBox(width: 10,)
+
+
+
+          MaterialButton(
+            onPressed: (){
+              GoRouter.of(context).go("/ProfilePage");
+            },
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(35),
+              child: Container(
+                width: 25,
+                height: 25,
+                child:(
+                    imgurl==null?
+                    Image.asset("assets/u.jpg",)
+                        :
+                    Image.network(imgurl!,scale: 0.6,)
+                ),
+              ),
+            )
+          ),
+
+
+          SizedBox(width: 0,)
         ],
       ),
       body: ZIMKitConversationListView(

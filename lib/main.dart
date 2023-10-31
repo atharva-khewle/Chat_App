@@ -11,6 +11,8 @@ import 'package:chatapp/pages/call/Callpage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 import 'package:zego_zimkit/services/services.dart';
@@ -18,6 +20,11 @@ import 'package:zego_zimkit/services/services.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  //initislise hive
+  await Hive.initFlutter();
+  await Hive.openBox("one");
+  await Hive.openBox("two");
 
 
   final navigatorKey = GlobalKey<NavigatorState>();
@@ -89,7 +96,7 @@ class MyApp extends StatelessWidget {
 
       GoRoute(
           path: "/",
-          builder: (context,state)=>RegisterPage()
+          builder: (context,state)=>LoginPage()
       ),
 
       GoRoute(

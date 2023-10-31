@@ -45,6 +45,10 @@ dependencies:
   firebase_core: ^2.20.0
   cloud_firestore: ^4.12.0
   font_awesome_flutter: ^10.6.0
+  firebase_auth: ^4.12.0
+  google_sign_in: ^6.1.5
+  hive:
+  hive_flutter:
 
 dev_dependencies:
   flutter_test:
