@@ -1,5 +1,6 @@
 
-import 'package:chatapp/pages/call/Callpage.dart';
+import 'package:chatapp/pages/call/VideoCallpage.dart';
+import 'package:chatapp/pages/call/VoiceCallPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -20,15 +21,120 @@ class _ChatsPageState extends State<ChatsPage> {
 
 
   String? imgurl = null;
+  String othersdesc = "error occured";
   firestoresrevice service = new firestoresrevice();
+  Future<int> getphoto()async{
+
+    String? temp= await service.getimage();
+    if(temp !=null) {
+      setState(() {
+        imgurl = temp;
+      });
+    }
+    return 0;
+  }
+
+
 
   @override
   void initState() {
     // TODO: implement initState
-    imgurl = service.getimgurl();
+    // imgurl = service.getimgurl();
+    getphoto();
 
     super.initState();
   }
+
+  Future<bool> setothersdesc(String oid)async{
+    final a = await service.getothersdescription(oid);
+    if(a!=null) {
+      setState(() {
+        othersdesc = a;
+      });
+      return true;
+
+    }
+
+    return false;
+  }
+
+  //update uername popup
+  Future descriptionPopup(BuildContext context,String oid){
+    String a = " \"  $othersdesc  \" ";
+    String b = "by $oid";
+    return showDialog(
+        context: context,
+        builder: (context){
+          return   StatefulBuilder(builder:(context,StateSetter setState){
+            return Container(
+              child: AlertDialog(
+                contentPadding: EdgeInsets.all(2),
+                // title: Center(
+                //   child: Text("New Username",
+                //     style: TextStyle(
+                //         color: Colors.deepPurple,
+                //         fontWeight: FontWeight.w500,
+                //         fontSize: 22
+                //     ),
+                //   ),
+                // ),
+
+                content: Container(
+                  height: 150,
+                  width: double.infinity,
+
+                  color: Colors.deepPurple.shade50,
+                  child: Center(
+                    child: Container(
+                      // color: Colors.red,
+                      constraints: BoxConstraints(
+                        minHeight: 100
+                      ),
+                      width: 200,
+                      child: Center(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.center,
+
+                          children: [
+
+                            Container(
+                              child: Text(a,
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.exo(
+                                    color: Colors.deepPurple.shade300,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 20,),
+                            Text(b,
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.exo(
+
+                                  color: Colors.deepPurple.shade300,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+
+                ),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+
+
+              ),
+            );
+          });
+        });
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -101,27 +207,40 @@ class _ChatsPageState extends State<ChatsPage> {
 
 
 
-          MaterialButton(
-            onPressed: (){
+          GestureDetector(
+            onTap: (){
               GoRouter.of(context).go("/ProfilePage");
             },
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(35),
-              child: Container(
-                width: 25,
-                height: 25,
-                child:(
-                    imgurl==null?
-                    Image.asset("assets/u.jpg",)
-                        :
-                    Image.network(imgurl!,scale: 0.6,)
+            child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                      color:Colors.deepPurple.shade50,
+                      width: 1
+                  ),
+                  borderRadius: BorderRadius.all(
+                      Radius.circular(5000.0) //                 <--- border radius here
+                  ),
+                ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(350),
+                child: Container(
+                  width: 33,
+                  height: 33,
+                  child:(imgurl==null || imgurl==""?
+                  Image.asset("assets/u.jpg",)
+                      :
+                  Image.network(imgurl!,
+                    scale: 0.59,
+                    fit: BoxFit.cover,
+                  )
+                  ),
                 ),
               ),
             )
           ),
 
 
-          SizedBox(width: 0,)
+          SizedBox(width: 24,)
         ],
       ),
       body: ZIMKitConversationListView(
@@ -203,6 +322,146 @@ class _ChatsPageState extends State<ChatsPage> {
           Navigator.push(context, MaterialPageRoute(
             builder: (context){
               return ZIMKitMessageListPage(
+
+                messageListLoadingBuilder: (context,widget){
+                  return Container(color: Colors.red,);
+                },
+
+
+                messageListBackgroundBuilder: (context, defaultWidget) {
+                  return Container(
+                    color: Colors.white,
+                  );
+                },
+
+
+                appBarBuilder: (context, defaultAppBar) {
+                  return AppBar(
+                    backgroundColor: Color(0xffA177E7),
+                    title: Row(
+                      children: [
+                        CircleAvatar(
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(1000),
+                            child: GestureDetector(
+                              onTap: ()async{
+                                if(conversation.type.name=="group"){
+                                  showDefaultUserListDialog(context, conversation.id);
+
+                                }else{
+
+                                  await setothersdesc(conversation.id);
+
+
+                                  // showUserDescriptionDialog(context, othersdesc,conversation.id);
+                                  descriptionPopup(context, conversation.id);
+                                  print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+
+                                }
+                              },
+                              child: Container(
+                                width: 100,
+                                height: 100,
+                                child: Expanded(child: conversation.icon),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 15),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            GestureDetector(
+                                onTap: ()async{
+                                  if(conversation.type.name=="group"){
+                                    showDefaultUserListDialog(context, conversation.id);
+
+                                  }else{
+
+                                    await setothersdesc(conversation.id);
+
+
+                                    // showUserDescriptionDialog(context, othersdesc,conversation.id);
+                                    descriptionPopup(context, conversation.id);
+                                    print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+
+                                  }
+                                },
+                                child: Text(conversation.name, style: const TextStyle(fontSize: 16,color: Colors.white,fontWeight: FontWeight.bold), overflow: TextOverflow.clip)),
+                            GestureDetector(
+                                onTap: ()async{
+                                  if(conversation.type.name=="group"){
+                                    showDefaultUserListDialog(context, conversation.id);
+
+                                  }else{
+
+                                    await setothersdesc(conversation.id);
+
+
+                                    // showUserDescriptionDialog(context, othersdesc,conversation.id);
+                                    descriptionPopup(context, conversation.id);
+                                    print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+
+                                  }
+                                },
+                                child: Text(conversation.id, style: const TextStyle(fontSize: 12,color: Colors.white), overflow: TextOverflow.clip))
+                          ],
+                        )
+                      ],
+                    ),
+                    actions: [
+                      IconButton(
+                          icon: const Icon(Icons.local_phone,color: Colors.white,),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  print(conversation.type.name);
+                                  return VoiceCallPage(reciever: conversation.id, calltype: conversation.type.name);
+                                },
+                              ),
+                            );
+                          }),
+
+                      IconButton(
+                          icon: const Icon(Icons.videocam,color: Colors.white,),
+                          onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              print(conversation.type.name);
+                              return VideoCallPage(reciever: conversation.id, calltype: conversation.type.name);
+                            },
+                          ),
+                        );
+                      }),
+                    ],
+                  );
+                },
+
+
+                messageItemBuilder: (context, message, defaultWidget){
+                  return Theme(
+                    data: ThemeData(primaryColor: Colors.deepPurpleAccent.shade100),
+                    child: defaultWidget,
+                  );
+                },
+
+
+                inputDecoration: InputDecoration(
+                  hintText: "Type a message",
+
+                ),
+
+
+                inputBackgroundDecoration: BoxDecoration(
+                  // color:  Color(0xffA177E7).withOpacity(0.5),
+                  borderRadius: BorderRadius.circular(4),
+
+
+                ),
                 appBarActions: [
 
 
@@ -219,21 +478,21 @@ class _ChatsPageState extends State<ChatsPage> {
 
                       itemBuilder:(context){
                         return [
-                          PopupMenuItem(
-
-                            value: "Video Call",
-                            child: Center(child: Icon(CupertinoIcons.video_camera_solid)),
-                            onTap: (){
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return CallPage();
-                                  },
-                                ),
-                              );
-                            },
-                          ),
+                          // PopupMenuItem(
+                          //
+                          //   value: "Video Call",
+                          //   child: Center(child: Icon(CupertinoIcons.video_camera_solid)),
+                          //   onTap: (){
+                          //     Navigator.push(
+                          //       context,
+                          //       MaterialPageRoute(
+                          //         builder: (context) {
+                          //           return VideoCallPage();
+                          //         },
+                          //       ),
+                          //     );
+                          //   },
+                          // ),
 
 
                           (conversation.type == ZIMConversationType.group?
@@ -340,12 +599,17 @@ Future<dynamic> showDefaultUserListDialog(BuildContext context, String groupID) 
                               color: Colors.white,
                               child: Column(
                                 children: [
-                                  Image.network(
-                                    member.memberAvatarUrl.isEmpty
-                                        ? 'https://robohash.org/${member
-                                        .userID}.png?set=set4'
-                                        : member.memberAvatarUrl,
-                                    fit: BoxFit.cover,
+                                  Container(
+
+                                    child: Image.network(
+                                      member.memberAvatarUrl.isEmpty || member.memberAvatarUrl==""
+                                          ? 'https://robohash.org/${member
+                                          .userID}.png?set=set4'
+                                          : member.memberAvatarUrl,
+                                      fit: BoxFit.cover,
+                                    ),
+                                    width: 70,
+                                    height: 70,
                                   ),
                                   Text(
                                     memberList[index].userName,
@@ -366,3 +630,58 @@ Future<dynamic> showDefaultUserListDialog(BuildContext context, String groupID) 
         );
       });
 }
+
+Future<dynamic> showUserDescriptionDialog(BuildContext context, String desc,String oid) {
+  String a = " \"  $desc  \" ";
+  String b = "by $oid";
+  return showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return SingleChildScrollView(
+          child: ClipRRect(
+            borderRadius: BorderRadius.only(topLeft: Radius.circular(4),topRight: Radius.circular(4)),
+            child: Container(
+              height: 150,
+              width: double.infinity,
+
+              color: Colors.deepPurple.shade50,
+              child: Center(
+                child: Container(
+                  color: Colors.red,
+                  height: 100,
+                  width: 300,
+                  child: Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.center,
+
+                      children: [
+
+                        Text(a,
+                          style: GoogleFonts.imperialScript(
+                            color: Colors.deepPurple.shade300,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 28
+                          ),
+                        ),
+                        SizedBox(height: 20,),
+                        Text(b,
+                          style: GoogleFonts.imperialScript(
+                              color: Colors.deepPurple.shade300,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 20
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+
+            ),
+          ),
+        );
+      });
+}
+
+

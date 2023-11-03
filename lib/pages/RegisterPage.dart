@@ -120,6 +120,10 @@ class _RegisterPageState extends State<RegisterPage> with SingleTickerProviderSt
       };
 
       box1.putinbox(apple1);
+      box2.putinbox("yes",0);
+      box2.putinbox(idd,1);
+      box2.putinbox(idd,2);
+
       GoRouter.of(context).go("/ChatsPage");
     }
   }
@@ -246,7 +250,10 @@ class _RegisterPageState extends State<RegisterPage> with SingleTickerProviderSt
   }
 
 
+
+  //hive related
 userbox box1 = new userbox();
+  connectedornot box2 = new connectedornot();
 
 
 
@@ -273,6 +280,10 @@ userbox box1 = new userbox();
 
 
 
+    }
+
+    if (box2.getdata(0)=="yes"){
+      zimloginhive(box2.getdata(1), box2.getdata(2));
     }
   }
 
@@ -343,6 +354,9 @@ userbox box1 = new userbox();
                           Text("O R I O N  C H A T",
                           style: GoogleFonts.raleway(fontSize: 30,color: Colors.deepPurple.shade800),
                           ),
+
+                          // Text("${box2.getdata(0)}"),
+
 
                           SizedBox(height: 17,),
                           Container(
@@ -565,7 +579,9 @@ userbox box1 = new userbox();
                                     "userid":userid.text,
                                     "username":userName.text
                                   };
-
+                                  box2.putinbox("yes",0);
+                                  box2.putinbox(userid.text,1);
+                                  box2.putinbox(userName.text,2);
                                   box1.putinbox(apple1);
 
                                   GoRouter.of(context).go("/ChatsPage");

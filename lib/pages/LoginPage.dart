@@ -152,6 +152,9 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
       };
 
       box1.putinbox(apple1);
+      box2.putinbox("yes",0);
+      box2.putinbox(idd,1);
+      box2.putinbox(idd,2);
 
       GoRouter.of(context).go("/ChatsPage");
     }
@@ -304,7 +307,6 @@ void googleSignOut()async {
                             style: GoogleFonts.raleway(fontSize: 30,color: Colors.deepPurple.shade800),
                           ),
 
-                          Text("${box2.getdata(0)}"),
 
                           SizedBox(height: 20,),
                           //image
@@ -329,7 +331,7 @@ void googleSignOut()async {
 
                             ),
                           ),
-                          SizedBox(height: 30,),
+                          SizedBox(height: 35,),
 
                           // Padding(
                           //   padding: const EdgeInsets.fromLTRB(60, 10, 60, 5),
@@ -388,7 +390,7 @@ void googleSignOut()async {
                               ),
                             ),
                           ),
-                          SizedBox(height: 12,),
+                          SizedBox(height: 15,),
                           //pass
                           Padding(
 
@@ -445,7 +447,7 @@ void googleSignOut()async {
                           //   ),
                           // ),
 
-                          SizedBox(height: 25,),
+                          SizedBox(height: 30,),
 
                           ElevatedButton(
                             onPressed: ()async {
@@ -494,14 +496,14 @@ void googleSignOut()async {
                                       userid.text, password.text)) {
                                     //right pass
 
+
                                     await ZIMKit().connectUser(
                                       id: userid.text,
                                       name: userName.text,
                                     );
 
 
-                                    ZegoUIKitPrebuiltCallInvitationService()
-                                        .init(
+                                    ZegoUIKitPrebuiltCallInvitationService().init(
                                       appID: Utils.id /*input your AppID*/,
                                       appSign: Utils
                                           .SignIn /*input your AppSign*/,
@@ -600,7 +602,7 @@ void googleSignOut()async {
 
 
 
-                          SizedBox(height: 65),
+                          SizedBox(height: 53),
                           Container(
                             // height: 1,
                             width: 500,

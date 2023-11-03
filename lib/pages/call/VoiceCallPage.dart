@@ -5,16 +5,50 @@ import 'package:go_router/go_router.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:zego_zimkit/services/services.dart';
 
-class CallPage extends StatefulWidget {
-  const CallPage({super.key});
+
+class VoiceCallPage extends StatefulWidget {
+  final String reciever;
+  final String calltype;
+  const VoiceCallPage({super.key,
+    required this.calltype,
+    required this.reciever,
+  });
 
   @override
-  State<CallPage> createState() => _CallPageState();
+  State<VoiceCallPage> createState() => _VoiceCallPageState();
 }
 
-class _CallPageState extends State<CallPage> {
+class _VoiceCallPageState extends State<VoiceCallPage> {
+  String callID = "";
 
- final String callID="1atharva_yes";
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getvidcallid();
+  }
+  String getvidcallid(){
+    final id ;
+
+
+    if((widget.reciever).compareTo(ZIMKit().currentUser()!.baseInfo.userID) >0 ) {
+      id = "${widget.calltype}" + "${ZIMKit()
+          .currentUser()
+          ?.baseInfo
+          .userID}";
+    }else{
+      id = "${widget.calltype}" + "${widget.reciever}" ;
+    }
+
+    setState(() {
+      callID = id;
+    });
+
+
+    return id;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +59,7 @@ class _CallPageState extends State<CallPage> {
       userName:    ZIMKit().currentUser()!.baseInfo.userName,
       callID: callID,
       // You can also use groupVideo/groupVoice/oneOnOneVoice to make more types of calls.
-      config: ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+      config: ZegoUIKitPrebuiltCallConfig.groupVoiceCall()
         ..bottomMenuBarConfig = ZegoBottomMenuBarConfig(buttons: [
           ZegoMenuBarButtonName.toggleCameraButton,
           ZegoMenuBarButtonName.toggleMicrophoneButton,
@@ -39,7 +73,7 @@ class _CallPageState extends State<CallPage> {
           Navigator.of(context).pop();
           // GoRouter.of(context).go("/ChatsPage");
 
-  },
+        },
     );
   }
 }
