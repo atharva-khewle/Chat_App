@@ -324,13 +324,20 @@ class _ChatsPageState extends State<ChatsPage> {
               return ZIMKitMessageListPage(
 
                 messageListLoadingBuilder: (context,widget){
-                  return Container(color: Colors.red,);
+                  return Container(child:Image.asset("assets/bg.jpg",
+                    fit: BoxFit.cover,
+
+                  ),);
                 },
 
 
                 messageListBackgroundBuilder: (context, defaultWidget) {
                   return Container(
                     color: Colors.white,
+                    child:Image.asset("assets/bg.jpg",
+                      fit: BoxFit.cover,
+
+                    ),
                   );
                 },
 
@@ -451,13 +458,14 @@ class _ChatsPageState extends State<ChatsPage> {
 
 
                 inputDecoration: InputDecoration(
+
                   hintText: "Type a message",
 
                 ),
 
 
                 inputBackgroundDecoration: BoxDecoration(
-                  // color:  Color(0xffA177E7).withOpacity(0.5),
+                  // color:  Color(0xffA177E7).withOpacity(0.3),
                   borderRadius: BorderRadius.circular(4),
 
 

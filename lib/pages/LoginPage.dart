@@ -124,15 +124,31 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
 
     if ((idd == null) ){
       print("--------------------------------------------------error occured");
-    }else {
+    }
+    else {
       print("started++++++++++++++++++++++++++++++++=");
 
-      await ZIMKit().connectUser(
-        id:idd,
-        name: idd,
+      //put photo or not
+      if (await service.checkemailexistance(userdata.user?.email)){
+        //email exists
+        //not putting photo
+        await ZIMKit().connectUser(
+            id:idd,
+            name: idd,
+        );
 
-        avatarUrl: idphoto==null ? "":idphoto
-      );
+      }
+      else{
+        //no email registered
+        //register email
+        //putting photo
+        await ZIMKit().connectUser(
+            id:idd,
+            name: idd,
+            avatarUrl: idphoto==null ? "":idphoto
+        );
+      }
+
 
 
       ZegoUIKitPrebuiltCallInvitationService().init(

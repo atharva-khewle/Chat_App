@@ -92,14 +92,29 @@ class _RegisterPageState extends State<RegisterPage> with SingleTickerProviderSt
 
     if ((idd == null) ){
       print("error occured");
-    }else {
+    }
+    else {
 
-      await ZIMKit().connectUser(
+      //put photo or not
+      if (await service.checkemailexistance(userdata.user?.email)){
+        //email exists
+        //not putting photo
+        await ZIMKit().connectUser(
           id:idd,
           name: idd,
+        );
 
-          avatarUrl: idphoto==null ? "":idphoto
-      );
+      }
+      else{
+        //no email registered
+        //register email
+        //putting photo
+        await ZIMKit().connectUser(
+            id:idd,
+            name: idd,
+            avatarUrl: idphoto==null ? "":idphoto
+        );
+      }
 
 
       ZegoUIKitPrebuiltCallInvitationService().init(
