@@ -2,7 +2,7 @@
 
 #Demo video
 
-[![Demo Video](./assets/video_thumbnail.png)]([https://path-to-your-demo-video.mp4](https://drive.google.com/file/d/1ODf7BgJOCUcm69sYNTM7SEPHEqf4JoAM/preview))
+[![Demo Video](https://www.elegantthemes.com/blog/wp-content/uploads/2019/04/change-wordpress-thumbnail-size-featured-image.jpg)](https://drive.google.com/file/d/1ODf7BgJOCUcm69sYNTM7SEPHEqf4JoAM/preview)
 
 
 ## Welcome
