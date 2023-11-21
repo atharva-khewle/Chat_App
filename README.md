@@ -2,7 +2,7 @@
 
 #Demo video
 
-click on image to see video
+click to watch video
 [![Demo Video](./assets/image.png)](https://drive.google.com/file/d/1ODf7BgJOCUcm69sYNTM7SEPHEqf4JoAM/preview)
 
 
