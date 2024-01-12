@@ -1,65 +1,56 @@
 # Orion Chat
 
-#Demo video
+- [Demo Video](#demo-video)
+- [Welcome](#welcome)
+- [Features](#features)
+  - [Account Management](#account-management)
+  - [Chat Functionality](#chat-functionality)
+  - [Status Updates](#status-updates)
+  - [Profile Customization](#profile-customization)
+  - [Security and Privacy](#security-and-privacy)
+  - [Multimedia and File Sharing](#multimedia-and-file-sharing)
+  - [Calls and Video Conferencing](#calls-and-video-conferencing)
+  - [Screen Sharing](#screen-sharing)
+- [Getting Started](#getting-started)
 
-click to watch video
 
-[![Demo Video](https://firebasestorage.googleapis.com/v0/b/orionhub-3967c.appspot.com/o/images%2FScreenshot_2024-01-12_143812-removebg-preview.png?alt=media&token=84ad38d3-05db-49b7-9e29-7586f00b3808)](https://drive.google.com/file/d/1ODf7BgJOCUcm69sYNTM7SEPHEqf4JoAM/preview)
-
+## Demo Video
+[![Demo Video](Demo Video Thumbnail URL)](Demo Video Link)
 
 ## Welcome
-Welcome to Orion Chat, a versatile Flutter app that provides a rich and engaging communication experience. Whether you want to connect one-on-one or gather in groups, Orion Chat has you covered with a range of features designed to enhance your chat experience.
+Welcome to Orion Chat, a versatile Flutter app that provides a rich and engaging communication experience. Whether you want to connect one-on-one or gather in groups, Orion Chat has you covered with a comprehensive range of features.
 
 ## Features
 
 ### Account Management
-- Create a personal account or seamlessly log in using Google authentication, allowing users to remain anonymous if desired.
+- Create a personal account or seamlessly log in using Google authentication.
 
 ### Chat Functionality
-- Engage in one-on-one conversations or group chats effortlessly.
-- Create and join groups using user IDs for easy and direct communication.
+- Engage in one-on-one conversations or group chats.
+- Create and join groups using user IDs for easy communication.
 
 ### Status Updates
-- Share your thoughts and activities through text-based status updates (feature currently in development).
+- Share your thoughts and activities through text and image-based status updates.
 
 ### Profile Customization
-- Personalize your user experience by changing your username and profile photo.
+- Personalize your experience with username, profile photo, user bio, and additional customization options.
 
 ### Security and Privacy
-- Prioritize user data security with robust authentication and encryption mechanisms.
+- Ensure user data security with robust authentication and encryption.
 
 ### Multimedia and File Sharing
-- Share various multimedia content, including images, videos, and files of any type.
+- Share various multimedia content, including images, videos, and files.
 
 ### Calls and Video Conferencing
-- Enjoy one-on-one video and audio calls.
-- Experience group video calls for both individual and collective engagement.
+- Enjoy one-on-one and group video and audio calls.
 
 ### Screen Sharing
-- Collaborate seamlessly with screen sharing capabilities during video calls.
-
-## Future Enhancements
-
-### Status Images
-- Enhance the status update feature with the ability to share images.
-
-### Profile Customization Expansion
-- Add more customization options, such as a user bio and additional personalization features.
+- Collaborate with screen sharing capabilities during video calls.
 
 ## Getting Started
 
-To get started with Orion Chat, follow these steps:
+Follow these steps to get started with Orion Chat:
 
 1. Clone the repository to your local machine.
 2. Install the necessary dependencies using `flutter pub get`.
 3. Run the app using `flutter run`.
-
-## Feedback and Contributions
-
-We value your feedback! If you encounter issues, have suggestions, or want to contribute, please open an issue or create a pull request.
-
-## Community Support
-
-Join our growing community! Connect with other users, share experiences, and get help by visiting our community forum.
-
-
