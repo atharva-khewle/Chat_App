@@ -15,7 +15,8 @@
 
 
 ## Demo Video
-[![Demo Video](Demo Video Thumbnail URL)](https://drive.google.com/file/d/1ODf7BgJOCUcm69sYNTM7SEPHEqf4JoAM/view?usp=drive_link)
+[![Demo Video](https://firebasestorage.googleapis.com/v0/b/orionhub-3967c.appspot.com/o/images%2FScreenshot_2024-01-12_143812-removebg-preview.png?alt=media&token=84ad38d3-05db-49b7-9e29-7586f00b3808)](https://drive.google.com/file/d/1ODf7BgJOCUcm69sYNTM7SEPHEqf4JoAM/view?usp=drive_link)
+
 
 ## Welcome
 Welcome to Orion Chat, a versatile Flutter app that provides a rich and engaging communication experience. Whether you want to connect one-on-one or gather in groups, Orion Chat has you covered with a comprehensive range of features.
